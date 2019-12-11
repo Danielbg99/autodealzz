@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="~{fragments/head}"></th:block>
+</head>
+<body>
+<div class="container-fluid">
+    <header>
+        <th:block th:include="~{fragments/nav-bar}"></th:block>
+    </header>
+    <main>
+        <div class="login d-flex justify-content-center mt-3">
+            <form method="get" action="/announcement/all">
+            <div class="row">
+                <div class="col-3">
+                    <select class="form-control" name="usability">
+                        <option selected="selected">Usability</option>
+                        <option th:each="usability : ${T(com.project.autodealz.data.entities.enumerations.Usability).values()}"
+                                th:value="${usability}" th:text="${usability}"></option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select class="form-control" id="brand-select" name="brand">
+                        <option selected="selected">Brand</option>
+                        <option th:each="brand : ${brands}"
+                                th:value="${brand.name}" th:text="${brand.name}"></option>
+                    </select></div>
+                <div class="col-3">
+                    <select class="form-control" name="model">
+                        <option selected="selected">Model</option>
+                        <option th:each="model : ${carModels}"
+                                th:value="${model.name}" th:text="${model.name}"
+                                th:class="|${model.brand.name} car-model|"></option>
+                    </select></div>
+                <div class="col-3">
+                    <select class="form-control" name="trasmissionType">
+                        <option selected="selected">Transmission Type</option>
+                        <option th:each="transm : ${T(com.project.autodealz.data.entities.enumerations.TransmissionType).values()}"
+                                th:value="${transm}" th:text="${transm}"></option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select class="form-control" name="fuelType">
+                        <option selected="selected">Fuel Type</option>
+                        <option th:each="fuel : ${T(com.project.autodealz.data.entities.enumerations.FuelType).values()}"
+                                th:value="${fuel}" th:text="${fuel}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="carColor" class="form-control" placeholder="Car Color"
+                           required>
+                </div>
+                <div class="col-3">
+                    <select class="form-control" name="propulsion">
+                        <option selected="selected">Propulsion</option>
+                        <option th:each="prop : ${T(com.project.autodealz.data.entities.enumerations.Propulsion).values()}"
+                                th:value="${prop}" th:text="${prop}"></option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <div class="button-holder mt-0 d-flex justify-content-center">
+                        <button type="submit" class="btn bg-hero glow-button">Search...</button>
+                    </div>
+                </div>
+            </div>
+    </main>
+    <footer>
+        <th:block th:include="~{fragments/footer}"></th:block>
+    </footer>
+</div>
+<script>
+    $('.car-model').hide();
+    $('#brand-select').change(function () {
+        $('.car-model').hide();
+        let selectedModel = $(this).val();
+        $('.' + selectedModel).show();
+    });
+</script>
+</body>
+</html>
