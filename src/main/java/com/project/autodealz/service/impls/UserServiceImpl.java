@@ -8,6 +8,7 @@ import com.project.autodealz.errors.Constants;
 import com.project.autodealz.service.RoleService;
 import com.project.autodealz.service.UserService;
 import com.project.autodealz.service.models.UserServiceModel;
+import org.apache.tomcat.util.bcel.Const;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -61,10 +62,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserServiceModel editUserProfile(UserServiceModel userServiceModel, String oldPassword) {
         User user = this.userRepository.findByUsername(userServiceModel.getUsername())
-                .orElseThrow(()-> new UsernameNotFoundException("USER_ID_NOT_FOUND"));
+                .orElseThrow(()-> new UsernameNotFoundException(Constants.USER_ID_NOT_FOUND));
 
         if (!this.bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new IllegalArgumentException("PASSWORD_IS_INCORRECT");
+            throw new IllegalArgumentException(Constants.PASSWORD_IS_INCORRECT);
         }
 
         user.setPassword(!"".equals(userServiceModel.getPassword()) ?
@@ -79,6 +80,6 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("USERNAME_NOT_FOUND"));
+                .orElseThrow(() -> new UsernameNotFoundException(Constants.USERNAME_NOT_FOUND));
     }
 }

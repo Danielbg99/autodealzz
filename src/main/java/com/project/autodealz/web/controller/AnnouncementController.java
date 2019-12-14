@@ -1,20 +1,22 @@
 package com.project.autodealz.web.controller;
 
+import com.project.autodealz.data.entities.Comment;
 import com.project.autodealz.data.models.CarAnnouncementCreateBindingModel;
+import com.project.autodealz.data.models.CommentBindingModel;
 import com.project.autodealz.data.models.SearchAnnouncementBindingModel;
 import com.project.autodealz.data.models.view.CarAnnouncementDetailsViewModel;
+import com.project.autodealz.data.models.view.CommentViewModel;
 import com.project.autodealz.data.models.view.UserProfileViewModel;
 import com.project.autodealz.data.repository.BrandRepository;
 import com.project.autodealz.data.repository.CarModelRepository;
 import com.project.autodealz.service.CarAnnouncementService;
 import com.project.autodealz.service.CloudinaryService;
 import com.project.autodealz.service.UserService;
-import com.project.autodealz.service.models.BrandServiceModel;
-import com.project.autodealz.service.models.CarAnnouncementServiceModel;
-import com.project.autodealz.service.models.CarModelServiceModel;
-import com.project.autodealz.service.models.SearchServiceModel;
+import com.project.autodealz.service.models.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -94,11 +96,21 @@ public class AnnouncementController extends BaseController {
         modelAndView.setViewName("announcement/all-announcements");
         return modelAndView;
     }
+    //todo: edit
     @GetMapping("/details/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView detailsAnnouncement(@PathVariable String id, ModelAndView modelAndView) {
         modelAndView.addObject("announcement", this.modelMapper.map(this.carAnnouncementService.findAnnouncementById(id), CarAnnouncementServiceModel.class));
         modelAndView.setViewName("announcement/details-announcement");
         return modelAndView;
+    }
+    @PostMapping("/details/{id}/comment")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CommentViewModel> commentAnnouncement(@PathVariable String id, CommentBindingModel commentBindingModel) {
+        CommentServiceModel comment = this.modelMapper.map(commentBindingModel , CommentServiceModel.class);
+
+        CommentViewModel commentViewModel = this.modelMapper.map(comment , CommentViewModel.class);
+
+        return ResponseEntity.status(HttpStatus.OK).body(commentViewModel);
     }
 }
