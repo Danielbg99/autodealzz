@@ -4,6 +4,7 @@ import com.project.autodealz.data.entities.Brand;
 import com.project.autodealz.data.entities.CarAnnouncement;
 import com.project.autodealz.data.entities.CarModel;
 import com.project.autodealz.data.repository.CarAnnouncementRepository;
+import com.project.autodealz.errors.Constants;
 import com.project.autodealz.service.BrandService;
 import com.project.autodealz.service.CarAnnouncementService;
 import com.project.autodealz.service.CarModelService;
@@ -64,14 +65,14 @@ public class CarAnnouncementServiceImpl implements CarAnnouncementService {
                 .stream()
                 .filter(ca -> {
                     if(searchServiceModel.getBrand() != null) {
-                        return ca.getBrand().getName() == searchServiceModel.getBrand();
+                        return ca.getBrand().getName().equals(searchServiceModel.getBrand());
                     }
 
                     return true;
                 })
                 .filter(ca -> {
                     if(searchServiceModel.getModel() != null) {
-                        return ca.getModel().getName() == searchServiceModel.getModel();
+                        return ca.getModel().getName().equals(searchServiceModel.getModel());
                     }
 
                     return true;
@@ -112,6 +113,6 @@ public class CarAnnouncementServiceImpl implements CarAnnouncementService {
     public CarAnnouncementServiceModel findAnnouncementById(String id) {
         return this.carAnnouncementRepository.findById(id)
                 .map(q -> this.modelMapper.map(q, CarAnnouncementServiceModel.class))
-                .orElseThrow(() -> new ExpressionException("QUOTE_ID_NOT_FOUND"));
+                .orElseThrow(() -> new ExpressionException(Constants.ANNOUNCEMENT_NOT_FOUND));
     }
 }

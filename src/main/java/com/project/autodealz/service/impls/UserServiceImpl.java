@@ -4,6 +4,7 @@ import com.project.autodealz.data.entities.Role;
 import com.project.autodealz.data.entities.User;
 import com.project.autodealz.data.repository.RoleRepository;
 import com.project.autodealz.data.repository.UserRepository;
+import com.project.autodealz.errors.Constants;
 import com.project.autodealz.service.RoleService;
 import com.project.autodealz.service.UserService;
 import com.project.autodealz.service.models.UserServiceModel;
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
     public UserServiceModel findUserByUserName(String username) {
         return this.userRepository.findByUsername(username)
                 .map(u -> this.modelMapper.map(u, UserServiceModel.class))
-                .orElseThrow(() -> new UsernameNotFoundException("USERNAME_NOT_FOUND"));
+                .orElseThrow(() -> new UsernameNotFoundException(Constants.USERNAME_NOT_FOUND));
     }
 
     @Override

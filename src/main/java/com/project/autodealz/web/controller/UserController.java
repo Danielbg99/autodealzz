@@ -10,6 +10,7 @@ import com.project.autodealz.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Controller
@@ -85,5 +87,13 @@ public class UserController extends BaseController{
         this.userService.editUserProfile(this.modelMapper.map(model, UserServiceModel.class), model.getOldPassword());
 
         return super.redirect("/users/profile");
+    }
+
+    @GetMapping("/fanshop")
+    @PreAuthorize("isAuthenticated()")
+    public void fanshopRedirect(Authentication authentication, HttpServletResponse response) {
+        response.addHeader("SM_USER", authentication.getName());
+        response.addHeader("Location", "http://localhost:1022/create");
+        response.setStatus(302);
     }
 }

@@ -83,7 +83,6 @@ public class AnnouncementController extends BaseController {
     public ModelAndView showAll(@ModelAttribute SearchAnnouncementBindingModel searchAnnouncementBindingModel, ModelAndView modelAndView){
         SearchServiceModel searchServiceModel = this.modelMapper.map(searchAnnouncementBindingModel, SearchServiceModel.class);
 
-
         List<CarAnnouncementServiceModel> announcements = this.carAnnouncementService.findAllAnnouncements(searchServiceModel)
                 .stream()
                 .map(q -> this.modelMapper.map(q, CarAnnouncementServiceModel.class))
@@ -91,7 +90,7 @@ public class AnnouncementController extends BaseController {
 
 
 
-        modelAndView.addObject("announcements", announcements);
+        modelAndView.addObject( "announcements", announcements);
         modelAndView.setViewName("announcement/all-announcements");
         return modelAndView;
     }
