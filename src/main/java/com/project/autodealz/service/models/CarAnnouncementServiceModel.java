@@ -2,6 +2,8 @@ package com.project.autodealz.service.models;
 
 import com.project.autodealz.data.entities.enumerations.*;
 
+import java.util.List;
+
 public class CarAnnouncementServiceModel {
     private String id;
 
@@ -24,6 +26,8 @@ public class CarAnnouncementServiceModel {
     private String pictureUrl;
 
     private String description;
+
+    private List<CommentServiceModel> comments;
 
     public CarAnnouncementServiceModel() {
     }
@@ -114,5 +118,13 @@ public class CarAnnouncementServiceModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<CommentServiceModel> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentServiceModel> comments) {
+        this.comments = comments;
     }
 }

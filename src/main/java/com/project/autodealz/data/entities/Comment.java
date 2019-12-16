@@ -1,9 +1,9 @@
 package com.project.autodealz.data.entities;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "comments")
 public class Comment extends BaseEntity{
     @Column(name = "content")
     private String content;

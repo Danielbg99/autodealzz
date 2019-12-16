@@ -36,6 +36,10 @@ public class UserServiceImpl implements UserService {
         this.roleRepository = roleRepository;
     }
 
+    User getUserByUsernameInternal(String username) {
+        return this.userRepository.findByUsername(username).orElse(null);
+    }
+
     @Override
     public UserServiceModel register(UserServiceModel userServiceModel) {
         this.roleService.seedRolesInDB();

@@ -5,13 +5,17 @@ import com.project.autodealz.data.entities.enumerations.*;
 import com.project.autodealz.service.models.BrandServiceModel;
 import com.project.autodealz.service.models.CarModelServiceModel;
 
+import java.util.List;
+
 public class CarAnnouncementDetailsViewModel {
+
+    private String id;
 
     private Usability usability;
 
-    private String brand;
+    private String brandName;
 
-    private String model;
+    private String modelName;
 
     private VehicleType vehicleType;
 
@@ -27,7 +31,17 @@ public class CarAnnouncementDetailsViewModel {
 
     private String description;
 
+    private List<CommentViewModel> comments;
+
     public CarAnnouncementDetailsViewModel() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Usability getUsability() {
@@ -86,20 +100,20 @@ public class CarAnnouncementDetailsViewModel {
         this.pictureUrl = pictureUrl;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getBrandName() {
+        return brandName;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
-    public String getModel() {
-        return model;
+    public String getModelName() {
+        return modelName;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
     public String getDescription() {
@@ -108,5 +122,13 @@ public class CarAnnouncementDetailsViewModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<CommentViewModel> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentViewModel> comments) {
+        this.comments = comments;
     }
 }

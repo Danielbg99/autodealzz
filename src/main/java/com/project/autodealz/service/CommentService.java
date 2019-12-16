@@ -4,5 +4,5 @@ import com.project.autodealz.service.models.CommentServiceModel;
 
 public interface CommentService {
 
-    CommentServiceModel createComment(CommentServiceModel commentServiceModel);
+    CommentServiceModel createComment(String carAnnouncementId, String username, CommentServiceModel commentServiceModel);
 }

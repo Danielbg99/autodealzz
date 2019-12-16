@@ -1,6 +1,5 @@
 package com.project.autodealz.web.controller;
 
-import com.project.autodealz.data.entities.Comment;
 import com.project.autodealz.data.models.CarAnnouncementCreateBindingModel;
 import com.project.autodealz.data.models.CommentBindingModel;
 import com.project.autodealz.data.models.SearchAnnouncementBindingModel;
@@ -11,6 +10,7 @@ import com.project.autodealz.data.repository.BrandRepository;
 import com.project.autodealz.data.repository.CarModelRepository;
 import com.project.autodealz.service.CarAnnouncementService;
 import com.project.autodealz.service.CloudinaryService;
+import com.project.autodealz.service.CommentService;
 import com.project.autodealz.service.UserService;
 import com.project.autodealz.service.models.*;
 import org.modelmapper.ModelMapper;
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 public class AnnouncementController extends BaseController {
 
     private final CarAnnouncementService carAnnouncementService;
+    private final CommentService commentService;
     private final ModelMapper modelMapper;
     private final UserService userService;
     private final BrandRepository brandRepository;
@@ -39,8 +40,9 @@ public class AnnouncementController extends BaseController {
     private final CarModelRepository carModelRepository;
 
     @Autowired
-    public AnnouncementController(CarAnnouncementService carAnnouncementService, ModelMapper modelMapper, UserService userService, BrandRepository brandRepository, CloudinaryService cloudinaryService, CarModelRepository carModelRepository) {
+    public AnnouncementController(CarAnnouncementService carAnnouncementService, CommentService commentService, ModelMapper modelMapper, UserService userService, BrandRepository brandRepository, CloudinaryService cloudinaryService, CarModelRepository carModelRepository) {
         this.carAnnouncementService = carAnnouncementService;
+        this.commentService = commentService;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.brandRepository = brandRepository;
@@ -100,16 +102,18 @@ public class AnnouncementController extends BaseController {
     @GetMapping("/details/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView detailsAnnouncement(@PathVariable String id, ModelAndView modelAndView) {
-        modelAndView.addObject("announcement", this.modelMapper.map(this.carAnnouncementService.findAnnouncementById(id), CarAnnouncementServiceModel.class));
+        modelAndView.addObject("announcement", this.modelMapper.map(this.carAnnouncementService.findAnnouncementById(id), CarAnnouncementDetailsViewModel.class));
         modelAndView.setViewName("announcement/details-announcement");
         return modelAndView;
     }
     @PostMapping("/details/{id}/comment")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<CommentViewModel> commentAnnouncement(@PathVariable String id, CommentBindingModel commentBindingModel) {
+    public ResponseEntity<CommentViewModel> commentAnnouncement(@PathVariable String id, @RequestBody CommentBindingModel commentBindingModel, Principal principal) {
         CommentServiceModel comment = this.modelMapper.map(commentBindingModel , CommentServiceModel.class);
 
-        CommentViewModel commentViewModel = this.modelMapper.map(comment , CommentViewModel.class);
+        comment = this.commentService.createComment(id, principal.getName(), comment);
+
+        CommentViewModel commentViewModel = this.modelMapper.map(comment, CommentViewModel.class);
 
         return ResponseEntity.status(HttpStatus.OK).body(commentViewModel);
     }

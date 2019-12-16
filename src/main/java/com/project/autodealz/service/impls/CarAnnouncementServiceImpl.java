@@ -36,7 +36,9 @@ public class CarAnnouncementServiceImpl implements CarAnnouncementService {
     }
 
 
-
+    CarAnnouncement getEntityByIdInternal(String id) {
+        return this.carAnnouncementRepository.findById(id).orElse(null);
+    }
 
     @Override
     public CarAnnouncementServiceModel createAnnouncement(CarAnnouncementServiceModel carAnnouncementServiceModel) {

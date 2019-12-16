@@ -4,6 +4,7 @@ package com.project.autodealz.data.entities;
 import com.project.autodealz.data.entities.enumerations.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "car_announcement")
@@ -41,6 +42,8 @@ public class CarAnnouncement extends BaseEntity{
     @JoinColumn(name = "car_announcement_id", referencedColumnName = "id")
     private User user;
 
+    @OneToMany(mappedBy = "carAnnouncement", targetEntity = Comment.class)
+    private List<Comment> comments;
 
     public CarAnnouncement() {
     }
@@ -123,6 +126,14 @@ public class CarAnnouncement extends BaseEntity{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     //    public String getAnnouncementNumber() {
