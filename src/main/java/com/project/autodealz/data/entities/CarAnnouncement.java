@@ -42,7 +42,7 @@ public class CarAnnouncement extends BaseEntity{
     @JoinColumn(name = "car_announcement_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "carAnnouncement", targetEntity = Comment.class)
+    @OneToMany(mappedBy = "carAnnouncement", targetEntity = Comment.class, cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     public CarAnnouncement() {

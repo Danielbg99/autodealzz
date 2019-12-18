@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,8 +102,9 @@ public class AnnouncementController extends BaseController {
     //todo: edit
     @GetMapping("/details/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView detailsAnnouncement(@PathVariable String id, ModelAndView modelAndView) {
+    public ModelAndView detailsAnnouncement(@PathVariable String id, ModelAndView modelAndView, Principal principal) {
         modelAndView.addObject("announcement", this.modelMapper.map(this.carAnnouncementService.findAnnouncementById(id), CarAnnouncementDetailsViewModel.class));
+        modelAndView.addObject("usersCommentUsername", principal.getName());
         modelAndView.setViewName("announcement/details-announcement");
         return modelAndView;
     }
@@ -116,5 +118,13 @@ public class AnnouncementController extends BaseController {
         CommentViewModel commentViewModel = this.modelMapper.map(comment, CommentViewModel.class);
 
         return ResponseEntity.status(HttpStatus.OK).body(commentViewModel);
+    }
+
+    @PostMapping("/comments/delete/{commentId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity deleteComment(@PathVariable String commentId) {
+        this.commentService.deleteComment(commentId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new LinkedHashMap<String, String>());
     }
 }

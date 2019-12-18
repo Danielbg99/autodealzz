@@ -8,10 +8,10 @@ public class Comment extends BaseEntity{
     @Column(name = "content")
     private String content;
 
-    @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = User.class)
     private User user;
 
-    @ManyToOne(targetEntity = CarAnnouncement.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = CarAnnouncement.class)
     private CarAnnouncement carAnnouncement;
 
     public Comment() {

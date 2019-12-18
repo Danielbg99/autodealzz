@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-
     private final ModelMapper modelMapper;
 
     private final CarAnnouncementService carAnnouncementService;
@@ -30,6 +29,12 @@ public class CommentServiceImpl implements CommentService {
         this.carAnnouncementService = carAnnouncementService;
         this.userService = userService;
         this.commentRepository = commentRepository;
+    }
+
+    @Override
+    public boolean deleteComment(String id) {
+        this.commentRepository.delete(this.commentRepository.findById(id).orElse(null));
+        return true;
     }
 
     @Override

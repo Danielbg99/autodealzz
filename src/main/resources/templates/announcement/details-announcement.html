@@ -63,9 +63,16 @@
                 <hr style="height: 2px;" class="bg-dark w-75"/>
                 <div class="comments mx-4 mb-3">
                     <th:block th:each="comment : ${announcement.comments}">
-                        <div class="comment border-black-2 rounded px-3 py-2 mt-2">
-                            <h5 class="text-left text-white font-weight-bold" th:text="${comment.userUsername}"></h5>
-                            <p class="text-white" th:text="${comment.content}"></p>
+                        <div class="comment border-black-2 rounded px-3 py-2 mt-2" th:id="${comment.id}">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="text-left text-white font-weight-bold"
+                                    th:text="${comment.userUsername}"></h5>
+                                <th:block th:if="${comment.userUsername} == ${usersCommentUsername}">
+                                    <button class="btn bg-transparent delete-comment"><span
+                                            style="font-size: 25px;">&#9746;</span></button>
+                                </th:block>
+                            </div>
+                            <p class="text-white " th:text="${comment.content}"></p>
                         </div>
                     </th:block>
                 </div>
@@ -86,17 +93,20 @@
 </div>
 <script th:inline="javascript">
     let commentTemplate =
-        '<div class="comment border-black-2 rounded px-3 py-2 mt-2">' +
-        '    <h5 class="text-left text-white font-weight-bold">(commentUserUsername)</h5>' +
+        '<div class="comment border-black-2 rounded px-3 py-2 mt-2" id="(commentId)">' +
+        '    <div class="d-flex justify-content-between">' +
+        '        <h5 class="text-left text-white font-weight-bold">(commentUserUsername)</h5>' +
+        '        <button class="btn bg-transparent delete-comment"><span style="font-size: 25px;">&#9746;</span></button>' +
+        '    </div>' +
         '    <p class="text-white">(commentContent)</p>' +
         '</div>';
 
     let carAnnouncementId = [[${announcement.id}]];
 
-    $('#comment-button').click(function() {
+    $('#comment-button').click(function () {
         let commentContent = $('#content').val();
 
-        if(commentContent.length > 0) {
+        if (commentContent.length > 0) {
             fetch(`/announcement/details/${carAnnouncementId}/comment`, {
                 method: 'POST',
                 headers: {
@@ -106,12 +116,55 @@
             })
                 .then(response => response.json())
                 .then(json => {
-                    $('.comments').append(commentTemplate
+                    let newComment = $(commentTemplate
+                        .replace('(commentId)', json.id)
                         .replace('(commentUserUsername)', json.userUsername)
                         .replace('(commentContent)', json.content));
+
+                    $('.comments').append(newComment);
+
+                    $('.delete-comment:last-child').click(function () {
+                        let commentElement = $(this).parent().parent();
+                        let id = commentElement.attr('id');
+
+                        fetch(`/announcement/comments/delete/${id}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(json => {
+                                $(commentElement).remove();
+                            })
+                            .catch(err => {
+                                throw err;
+                            });
+                    });
                 })
-                .catch(err => {throw err;});
+                .catch(err => {
+                    throw err;
+                });
         }
+    });
+
+    $('.delete-comment').click(function () {
+        let commentElement = $(this).parent().parent();
+        let id = commentElement.attr('id');
+
+        fetch(`/announcement/comments/delete/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                $(commentElement).remove();
+            })
+            .catch(err => {
+                throw err;
+            });
     });
 </script>
 </body>
